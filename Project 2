@@ -1,2 +1,107 @@
 //SIMPLE SOCIAL NETWORK
+#include <iostream>
+#include <vector>
+#include <string>
+
+// User class to represent a user in the social media network
+class User {
+public:
+    std::string name;
+    std::vector<std::string> posts;
+
+    User(const std::string& userName) : name(userName) {}
+
+    void addPost(const std::string& post) {
+        posts.push_back(post);
+    }
+
+    void displayPosts() const {
+        std::cout << name << "'s Posts:\n";
+        for (const auto& post : posts) {
+            std::cout << "- " << post << "\n";
+        }
+    }
+};
+
+// SocialMediaNetwork class to manage users and interactions
+class SocialMediaNetwork {
+private:
+    std::vector<User> users;
+
+public:
+    void createUser(const std::string& userName) {
+        users.emplace_back(userName);
+        std::cout << "User " << userName << " created successfully.\n";
+    }
+
+    User* findUser(const std::string& userName) {
+        for (auto& user : users) {
+            if (user.name == userName) {
+                return &user;
+            }
+        }
+        return nullptr;
+    }
+
+    void displayAllPosts() const {
+        for (const auto& user : users) {
+            user.displayPosts();
+            std::cout << "\n";
+        }
+    }
+};
+
+int main() {
+    SocialMediaNetwork network;
+    int choice;
+    std::string userName;
+    std::string postContent;
+
+    while (true) {
+        std::cout << "1. Create User\n";
+        std::cout << "2. Post Message\n";
+        std::cout << "3. View All Posts\n";
+        std::cout << "4. Exit\n";
+        std::cout << "Enter your choice: ";
+        std::cin >> choice;
+        std::cin.ignore(); // Ignore leftover newline character
+
+        switch (choice) {
+            case 1: {
+                std::cout << "Enter username: ";
+                std::getline(std::cin, userName);
+                network.createUser(userName);
+                break;
+            }
+            case 2: {
+                std::cout << "Enter username: ";
+                std::getline(std::cin, userName);
+                User* user = network.findUser(userName);
+                if (user) {
+                    std::cout << "Enter your post message: ";
+                    std::getline(std::cin, postContent);
+                    user->addPost(postContent);
+                    std::cout << "Post added successfully.\n";
+                } else {
+                    std::cout << "User not found.\n";
+                }
+                break;
+            }
+            case 3: {
+                network.displayAllPosts();
+                break;
+            }
+            case 4: {
+                std::cout << "Exiting...\n";
+                return 0;
+            }
+            default: {
+                std::cout << "Invalid choice. Please try again.\n";
+                break;
+            }
+        }
+    }
+
+    return 0;
+}
 
